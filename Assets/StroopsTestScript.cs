@@ -96,7 +96,7 @@ public class StroopsTestScript : MonoBehaviour {
 
 			screenText.text = colorNames[textIx];
 			screenText.color = colors[colorIx];
-			yield return new WaitForSeconds(1.25f);
+			yield return new WaitForSeconds(1.55f);
 		}
 	}
 
