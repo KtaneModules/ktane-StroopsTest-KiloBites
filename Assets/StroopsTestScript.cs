@@ -122,8 +122,8 @@ public class StroopsTestScript : MonoBehaviour {
 					case 0:
 						return firstWord != null && firstWord == wordList.Last();
 					case 1:
-						return wordList.Last() != 4 || wordList.Last() != 5 || colorList.Last() != 4 || colorList.Last() != 5;
-					case 2:
+                        return wordList.Last() != 4 && colorList.Last() != 4 && wordList.Last() != 5 && colorList.Last() != 5;
+                    case 2:
 						return colorList[colorList.Count - 2] == colorList.Last();
 					case 3:
 						return wordList[wordList.Count - 2] == wordList.Last();
@@ -141,6 +141,7 @@ public class StroopsTestScript : MonoBehaviour {
 				}
 				break;
 			case 1:
+
 				switch (color)
 				{
 					case 0:
@@ -148,9 +149,9 @@ public class StroopsTestScript : MonoBehaviour {
 					case 1:
 						return firstWord != null && firstWord == colorList.Last();
 					case 2:
-						return wordList.Last() != 0 || wordList.Last() != 3 || colorList.Last() != 0 || colorList.Last() != 3;
+						return wordList.Last() != 0 && colorList.Last() != 0 && wordList.Last() != 3 && colorList.Last() != 3;
 					case 3:
-						return wordList.Last() != 2 || wordList.Last() != 1 || colorList.Last() != 2 || colorList.Last() != 1;
+						return wordList.Last() != 2 && colorList.Last() != 2 && wordList.Last() != 1 && colorList.Last() != 1;
 					case 4:
 						return wordList[wordList.Count - 2] == wordList.Last();
 					case 5:
@@ -173,7 +174,7 @@ public class StroopsTestScript : MonoBehaviour {
 					case 0:
 						return string.Format("You pressed {0} while the first submitted word ({1}) {2} the current slide's word ({3}).", button, firstWord == null ? "doesn't exist" : colorNames[firstWord.Value], valid ? "matches" : "doesn't match", colorNames[wordList.Last()]);
 					case 1:
-						return string.Format("You pressed {0} while the current slide's word ({1}) or the current slide's text color ({2}) {3}.", button, colorNames[wordList.Last()], colorNames[colorList.Last()], valid ? "isn't Magenta nor White" : "is Magenta or White");
+						return string.Format("You pressed {0} while the current slide's word ({1}) and the current slide's text color ({2}) {3}.", button, colorNames[wordList.Last()], colorNames[colorList.Last()], valid ? "isn't Magenta nor White" : "is Magenta or White");
 					case 2:
 						return string.Format("You pressed {0} while the color on the previous slide ({1}) {2} the current slide's text color ({3}).", button, colorNames[colorList[colorList.Count - 1]], valid ? "matches" : "doesn't match", colorNames[colorList.Last()]);
 					case 3:
@@ -192,9 +193,9 @@ public class StroopsTestScript : MonoBehaviour {
 					case 1:
 						return string.Format("You pressed {0} while the first submitted word ({1}) {2} the current slide's text color ({3}).", button, firstWord == null ? "doesn't exist" : colorNames[firstWord.Value], valid ? "matches" : "doesn't match", colorNames[colorList.Last()]);
 					case 2:
-						return string.Format("You pressed {0} while the current slide's word ({1}) or the current slide's text color ({2}) {3}.", button, colorNames[wordList.Last()], colorNames[colorList.Last()], valid ? "isn't Red nor Blue" : "is Red or Blue");
+						return string.Format("You pressed {0} while the current slide's word ({1}) and the current slide's text color ({2}) {3}.", button, colorNames[wordList.Last()], colorNames[colorList.Last()], valid ? "isn't Red nor Blue" : "is Red or Blue");
 					case 3:
-                        return string.Format("You pressed {0} while the current slide's word ({1}) or the current slide's text color ({2}) {3}.", button, colorNames[wordList.Last()], colorNames[colorList.Last()], valid ? "isn't Green nor Yellow" : "is Green or Yellow");
+                        return string.Format("You pressed {0} while the current slide's word ({1}) and the current slide's text color ({2}) {3}.", button, colorNames[wordList.Last()], colorNames[colorList.Last()], valid ? "isn't Green nor Yellow" : "is Green or Yellow");
 					case 4:
 						return string.Format("You pressed {0} while the word on the previous slide ({1}) {2} the current slide's word ({3}).", button, colorNames[wordList[wordList.Count - 2]], valid ? "matches" : "doesn't match", colorNames[wordList.Last()]);
 					case 5:
