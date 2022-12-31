@@ -452,18 +452,43 @@ public class StroopsTestScript : MonoBehaviour
         }
         yield return null;
         int btn;
+        int w;
+        int c;
         while (true)
         {
             for (int i = 0; i < list.Count; i++)
                 if (list[i].Word == wordList.Last() && list[i].Color == colorList.Last())
                 {
+                    w = list[i].Word;
+                    c = list[i].Color;
                     btn = list[i].Button;
                     goto foundPress;
                 }
             yield return "trycancel";
         }
         foundPress:
+        yield return string.Format("sendtochat {0} was pressed on word {1} with color {2} on Module {3} (Stroop's Test).",
+            new[] { "YES", "NO" }[btn],
+            new[] { "RED", "YELLOW", "GREEN", "BLUE", "MAGENTA", "WHITE" }[w],
+            new[] { "RED", "YELLOW", "GREEN", "BLUE", "MAGENTA", "WHITE" }[c],
+            GetModuleCode());
         buttons[btn].OnInteract();
+    }
+
+    private string GetModuleCode()
+    {
+        Transform closest = null;
+        float closestDistance = float.MaxValue;
+        foreach (Transform children in transform.parent)
+        {
+            var distance = (transform.position - children.position).magnitude;
+            if (children.gameObject.name == "TwitchModule(Clone)" && (closest == null || distance < closestDistance))
+            {
+                closest = children;
+                closestDistance = distance;
+            }
+        }
+        return closest != null ? closest.Find("MultiDeckerUI").Find("IDText").GetComponent<UnityEngine.UI.Text>().text : null;
     }
 
     private IEnumerator TwitchHandleForcedSolve()
