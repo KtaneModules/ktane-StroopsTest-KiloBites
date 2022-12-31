@@ -304,6 +304,7 @@ Transform:
   - {fileID: 4484048142134098}
   - {fileID: 4078675556412836}
   - {fileID: 4285313996403442}
+  - {fileID: 4536392034786958}
   - {fileID: 4679620764203776}
   - {fileID: 4873299944235250}
   - {fileID: 4897083577897738}
@@ -348,8 +349,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.016, y: 0.0146, z: 0.036}
   m_LocalScale: {x: 0.1, y: 0.02, z: 0.05}
-  m_Children:
-  - {fileID: 4536392034786958}
+  m_Children: []
   m_Father: {fileID: 4142567986073564}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -365,7 +365,7 @@ Transform:
   m_Children:
   - {fileID: 4819722776018472}
   m_Father: {fileID: 4142567986073564}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4484048142134098
 Transform:
@@ -386,12 +386,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1763629917410796}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.51, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.10000002, z: 1}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -0.016, y: 0.024799999, z: 0.036}
+  m_LocalScale: {x: 0.0050000004, y: 0.005, z: 0.02}
   m_Children: []
-  m_Father: {fileID: 4285313996403442}
-  m_RootOrder: 0
+  m_Father: {fileID: 4142567986073564}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!4 &4679620764203776
 Transform:
@@ -404,7 +404,7 @@ Transform:
   m_LocalScale: {x: 0.07, y: 0.002, z: 0.07}
   m_Children: []
   m_Father: {fileID: 4142567986073564}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4795482442178352
 Transform:
@@ -470,7 +470,7 @@ Transform:
   m_LocalScale: {x: 0.07, y: 0.002, z: 0.07}
   m_Children: []
   m_Father: {fileID: 4142567986073564}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4897083577897738
 Transform:
@@ -484,7 +484,7 @@ Transform:
   m_Children:
   - {fileID: 4268752272047592}
   m_Father: {fileID: 4142567986073564}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23049221378201788
 MeshRenderer:
