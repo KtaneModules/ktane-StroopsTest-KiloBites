@@ -14,8 +14,17 @@ MonoBehaviour:
   id: stroopsTest
   title: Stroop's Test
   author: Kilo Bites & ItzShaun
-  description: Check if conditions are true based on the word or color of the currently
-    generated slide.
+  description: 'Is there any more room for a eleventh? [NO]
+
+
+    Check if conditions are true based on the word or color of the currently generated
+    slide.
+
+
+    Manual by ItzShaun, implemented by Kilo Bites
+
+
+    Twitch Plays support by Quinn Wuest'
   version: 1
   outputFolder: build
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 2800000, guid: 9338df93d9fc878438bd4e5219ac2733, type: 3}

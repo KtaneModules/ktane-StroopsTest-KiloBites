@@ -178,9 +178,9 @@ public class StroopsTestScript : MonoBehaviour
                     case 1:
                         return string.Format("You pressed {0} while the current slide's word ({1}) and the current slide's text color ({2}) {3}.", button, colorNames[wordList.Last()], colorNames[colorList.Last()], valid ? "isn't Magenta nor White" : "is Magenta or White");
                     case 2:
-                        return string.Format("You pressed {0} while the color on the previous slide ({1}) {2} the current slide's text color ({3}).", button, colorNames[colorList[colorList.Count - 1]], valid ? "matches" : "doesn't match", colorNames[colorList.Last()]);
+                        return string.Format("You pressed {0} while the color on the previous slide ({1}) {2} the current slide's text color ({3}).", button, colorNames[colorList[colorList.Count - 2]], valid ? "matches" : "doesn't match", colorNames[colorList.Last()]);
                     case 3:
-                        return string.Format("You pressed {0} while the word on the previous slide ({1}) {2} the current slide's text color ({3}).", button, colorNames[wordList[wordList.Count - 1]], valid ? "matches" : "doesn't match", colorNames[colorList.Last()]);
+                        return string.Format("You pressed {0} while the word on the previous slide ({1}) {2} the current slide's text color ({3}).", button, colorNames[wordList[wordList.Count - 2]], valid ? "matches" : "doesn't match", colorNames[colorList.Last()]);
                     case 4:
                         return string.Format("You pressed {0} while the first submitted text color ({1}) {2} the current slide's word ({3}).", button, firstColor == null ? "doesn't exist" : colorNames[firstColor.Value], valid ? "matches" : "doesn't match", colorNames[wordList.Last()]);
                     case 5:
@@ -269,8 +269,11 @@ public class StroopsTestScript : MonoBehaviour
                 Debug.LogFormat("[Stroop's Test #{0}] First submitted word and color is {1} in {2}.", moduleId, colorNames[firstWord.Value], colorNames[firstColor.Value]);
             }
             stage++;
-            StopAllCoroutines();
-            StartCoroutine(submittedDisplay());
+            if (stage != 3)
+            {
+                StopAllCoroutines();
+                StartCoroutine(submittedDisplay());
+            }          
             Debug.LogFormat("[Stroop's Test #{0}] {1} {2}", moduleId, validLogging(questionCond, currentCond == 0 ? colorList.Last() : wordList.Last(), 0, validation), stage != 3 ? string.Format("Advancing to stage {0}.", (stage + 1).ToString()) : "Solved!");
 
         }
@@ -315,8 +318,11 @@ public class StroopsTestScript : MonoBehaviour
                 Debug.LogFormat("[Stroop's Test #{0}] First submitted word and color is {1} in {2}.", moduleId, colorNames[firstWord.Value], colorNames[firstColor.Value]);
             }
             stage++;
-            StopAllCoroutines();
-            StartCoroutine(submittedDisplay());
+            if (stage != 3)
+            {
+                StopAllCoroutines();
+                StartCoroutine(submittedDisplay());
+            }
             Debug.LogFormat("[Stroop's Test #{0}] {1} {2}", moduleId, validLogging(questionCond, currentCond == 0 ? colorList.Last() : wordList.Last(), 1, validation), stage != 3 ? string.Format("Advancing to stage {0}.", (stage + 1).ToString()) : "Solved!");
         }
         else
