@@ -283,16 +283,27 @@ public class StroopsTestScript : MonoBehaviour
 
             if (pressed[0])
             {
-                Debug.LogFormat("[Stroop's Test #{0}] You pressed YES when you already have a valid YES pressed previous stage. Strike!", moduleId);
+                Debug.LogFormat("[Stroop's Test #{0}] You pressed YES when you already have a valid YES pressed previous stage. {1}", moduleId, stage != 0 ? "Resetting to stage 1." : null);
             }
             else if (alreadyAnswered[ix])
             {
-                Debug.LogFormat("[Stroop's Test #{0}] You pressed YES when the previous question submitted is already answered! Strike!", moduleId);
+                Debug.LogFormat("[Stroop's Test #{0}] You pressed YES when the previous question submitted is already answered! Strike! {1}", moduleId, stage != 0 ? "Resetting to stage 1." : null);
             }
             else
             {
-                Debug.LogFormat("[Stroop's Test #{0}] {1} Strike!", moduleId, validLogging(questionCond, currentCond == 0 ? colorList.Last() : wordList.Last(), 0, validation));
+                Debug.LogFormat("[Stroop's Test #{0}] {1} Strike! {2}", moduleId, validLogging(questionCond, currentCond == 0 ? colorList.Last() : wordList.Last(), 0, validation), stage != 0 ? "Resetting to stage 1" : null);
             }
+
+            pressed[0] = false;
+
+            for (int i = 0; i < 6; i++)
+            {
+                alreadyAnswered[i] = false;
+            }
+
+            firstWord = null;
+            firstColor = null;
+            stage = 0;
         }
     }
 
@@ -327,20 +338,31 @@ public class StroopsTestScript : MonoBehaviour
         }
         else
         {
-            Module.HandleStrike();
+            Module.HandleStrike();      
 
             if (pressed[1])
             {
-                Debug.LogFormat("[Stroop's Test #{0}] You pressed NO when you already have a valid NO pressed previous stage. Strike!", moduleId);
+                Debug.LogFormat("[Stroop's Test #{0}] You pressed NO when you already have a valid NO pressed previous stage. {1}", moduleId, stage != 0 ? "Resetting to stage 1." : null);
             }
             else if (alreadyAnswered[ix])
             {
-                Debug.LogFormat("[Stroop's Test #{0}] You pressed NO when the previous question submitted is already answered! Strike!", moduleId);
+                Debug.LogFormat("[Stroop's Test #{0}] You pressed NO when the previous question submitted is already answered! Strike! {1}", moduleId, stage != 0 ? "Resetting to stage 1." : null);
             }
             else
             {
-                Debug.LogFormat("[Stroop's Test #{0}] {1} Strike!", moduleId, validLogging(questionCond, currentCond == 0 ? colorList.Last() : wordList.Last(), 1, validation));
+                Debug.LogFormat("[Stroop's Test #{0}] {1} Strike! {2}", moduleId, validLogging(questionCond, currentCond == 0 ? colorList.Last() : wordList.Last(), 1, validation), stage != 0 ? "Resetting to stage 1." : null); ;
             }
+
+            pressed[1] = false;
+
+            for (int i = 0; i < 6; i++)
+            {
+                alreadyAnswered[i] = false;
+            }
+
+            firstWord = null;
+            firstColor = null;
+            stage = 0;
         }
     }
 
