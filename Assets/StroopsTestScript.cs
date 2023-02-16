@@ -149,7 +149,7 @@ public class StroopsTestScript : MonoBehaviour
                     case 0:
                         return colorList[colorList.Count - 2] == wordList.Last();
                     case 1:
-                        return firstWord != null && firstWord == colorList.Last();
+                        return firstColor != null && firstColor == colorList.Last();
                     case 2:
                         return wordList.Last() != 0 && colorList.Last() != 0 && wordList.Last() != 3 && colorList.Last() != 3;
                     case 3:
