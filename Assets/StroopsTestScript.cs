@@ -51,6 +51,9 @@ public class StroopsTestScript : MonoBehaviour
 
         Module.OnActivate += onActivate;
 
+        buttons[1].OnHighlight = delegate () { if (!moduleSolved && stage > 0) StartCoroutine("standBy"); };
+        buttons[1].OnHighlightEnded = delegate () { if (!moduleSolved) StopCoroutine("standBy"); };
+
     }
 
 
@@ -62,6 +65,27 @@ public class StroopsTestScript : MonoBehaviour
 
     void onActivate()
     {
+        StartCoroutine(generateSeq());
+    }
+
+    IEnumerator standBy()
+    {
+        yield return new WaitForSeconds(4.5f);
+        StopCoroutine(generateSeq());
+        wordList.Clear();
+        colorList.Clear();
+        screenText.text = "";
+        isActivated = false;
+        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.TitleMenuPressed, transform);
+        Debug.LogFormat("[Stroop's Test #{0}] Reset has been initiated! Resetting back to Stage 1.", moduleId);
+        yield return new WaitForSeconds(4);
+        reset();
+    }
+
+    void reset()
+    {
+        firstWord = null;
+        firstColor = null;
         StartCoroutine(generateSeq());
     }
 
