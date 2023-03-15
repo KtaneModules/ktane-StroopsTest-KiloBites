@@ -95,7 +95,6 @@ public class StroopsTestScript : MonoBehaviour
         colorList.Clear();
         screenText.text = "";
         isActivated = false;
-        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.TitleMenuPressed, transform);
         Debug.LogFormat("[Stroop's Test #{0}] Reset has been initiated! Resetting back to Stage 1.", moduleId);
         var arr = new[] { ".", "..", "..." };
         screenText.color = Color.white;
