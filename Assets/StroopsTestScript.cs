@@ -39,6 +39,9 @@ public class StroopsTestScript : MonoBehaviour
     private List<int> wordList = new List<int>();
     private List<int> colorList = new List<int>();
 
+    private Coroutine _resetTimer;
+    private Coroutine _generateSequence;
+
     void Awake()
     {
 
@@ -51,8 +54,16 @@ public class StroopsTestScript : MonoBehaviour
 
         Module.OnActivate += onActivate;
 
-        buttons[1].OnHighlight = delegate () { if (!moduleSolved && stage > 0) StartCoroutine("standBy"); };
-        buttons[1].OnHighlightEnded = delegate () { if (!moduleSolved) StopCoroutine("standBy"); };
+        buttons[1].OnHighlight = delegate ()
+        {
+            if (!moduleSolved && stage > 0 && isActivated)
+                _resetTimer = StartCoroutine(standBy());
+        };
+        buttons[1].OnHighlightEnded = delegate ()
+        {
+            if (!moduleSolved && _resetTimer != null && isActivated)
+                StopCoroutine(_resetTimer);
+        };
 
     }
 
@@ -65,20 +76,36 @@ public class StroopsTestScript : MonoBehaviour
 
     void onActivate()
     {
-        StartCoroutine(generateSeq());
+        _generateSequence = StartCoroutine(generateSeq());
     }
 
     IEnumerator standBy()
     {
-        yield return new WaitForSeconds(4.5f);
-        StopCoroutine(generateSeq());
+        var duration = 4.5f;
+        var elapsed = 0f;
+        while (elapsed <= duration)
+        {
+            yield return null;
+            elapsed += Time.deltaTime;
+        }
+        Audio.PlaySoundAtTransform("Reset", transform);
+        if (_generateSequence != null)
+            StopCoroutine(_generateSequence);
         wordList.Clear();
         colorList.Clear();
         screenText.text = "";
         isActivated = false;
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.TitleMenuPressed, transform);
         Debug.LogFormat("[Stroop's Test #{0}] Reset has been initiated! Resetting back to Stage 1.", moduleId);
-        yield return new WaitForSeconds(4);
+        var arr = new[] { ".", "..", "..." };
+        screenText.color = Color.white;
+        for (int i = 0; i < 9; i++)
+        {
+            screenText.text = "Reset" + arr[i % 3];
+            yield return new WaitForSeconds(0.42f);
+        }
+        screenText.text = "";
+        yield return new WaitForSeconds(0.75f);
         reset();
     }
 
@@ -86,13 +113,13 @@ public class StroopsTestScript : MonoBehaviour
     {
         firstWord = null;
         firstColor = null;
-        StartCoroutine(generateSeq());
+        if (_generateSequence != null)
+            StopCoroutine(_generateSequence);
+        _generateSequence = StartCoroutine(generateSeq());
     }
 
     IEnumerator generateSeq()
     {
-        yield return null;
-
         while (true)
         {
             var textIx = rnd.Range(0, colors.Length);
@@ -134,12 +161,13 @@ public class StroopsTestScript : MonoBehaviour
         screenText.color = colors[colorList.Last()];
         yield return new WaitForSeconds(2);
         pause = false;
-        StartCoroutine(generateSeq());
+        if (_generateSequence != null)
+            StopCoroutine(_generateSequence);
+        _generateSequence = StartCoroutine(generateSeq());
     }
 
     bool validCond(int question, int color)
     {
-
         switch (question)
         {
             case 0:
@@ -297,7 +325,7 @@ public class StroopsTestScript : MonoBehaviour
             {
                 StopAllCoroutines();
                 StartCoroutine(submittedDisplay());
-            }          
+            }
             Debug.LogFormat("[Stroop's Test #{0}] {1} {2}", moduleId, validLogging(questionCond, currentCond == 0 ? colorList.Last() : wordList.Last(), 0, validation), stage != 3 ? string.Format("Advancing to stage {0}.", (stage + 1).ToString()) : "Solved!");
 
         }
@@ -362,7 +390,7 @@ public class StroopsTestScript : MonoBehaviour
         }
         else
         {
-            Module.HandleStrike();      
+            Module.HandleStrike();
 
             if (pressed[1])
             {
@@ -490,6 +518,23 @@ public class StroopsTestScript : MonoBehaviour
     private IEnumerator ProcessTwitchCommand(string command)
     {
         command = command.Trim().ToLowerInvariant();
+        if (Regex.IsMatch(command, @"^\s*reset\s*"))
+        {
+            if (stage == 0)
+            {
+                yield return "sendtochaterror You cannot reset on Stage 1!";
+                yield break;
+            }
+            yield return null;
+            buttons[1].OnHighlight();
+            while (isActivated)
+            {
+                yield return null;
+                yield return "trycancel";
+            }
+            buttons[1].OnHighlightEnded();
+            yield break;
+        }
         var parameters = command.Split(';');
         var list = new List<TpPress>();
         for (int i = 0; i < parameters.Length; i++)
