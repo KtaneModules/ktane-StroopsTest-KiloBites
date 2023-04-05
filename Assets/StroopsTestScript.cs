@@ -112,6 +112,14 @@ public class StroopsTestScript : MonoBehaviour
     {
         firstWord = null;
         firstColor = null;
+        for (int i = 0; i < 6; i++)
+        {
+            alreadyAnswered[i] = false;
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            pressed[i] = false;
+        }
         if (_generateSequence != null)
             StopCoroutine(_generateSequence);
         _generateSequence = StartCoroutine(generateSeq());
