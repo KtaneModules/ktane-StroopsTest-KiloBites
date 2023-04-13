@@ -112,6 +112,7 @@ public class StroopsTestScript : MonoBehaviour
     {
         firstWord = null;
         firstColor = null;
+        stage = 0;
         for (int i = 0; i < 6; i++)
         {
             alreadyAnswered[i] = false;
