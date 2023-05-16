@@ -503,22 +503,28 @@ public class StroopsTestScript : MonoBehaviour
     }
 
     // TP and autosolver implemented by Quinn Wuest
-
 #pragma warning disable 0414
-    private readonly string TwitchHelpMessage = "!{0} yes red green [Press yes when the word red is shown in green color.] | Colors can be shortened to their first letter. (Red = R, Green = G, Blue = B, Magenta = M, Yellow = W, White = White\n" +
-        "Multiple combinations can be checked by chaining with semicolons. Only one of the conditions will be pressed.\n" +
-        "For example: \"yes red yellow; no white green\" will press either \"yes red yellow\" or \"no white green\", but not both.";
+    private readonly string TwitchHelpMessage = "Command format: !{0} xx-x or !{0} xx-xx-x. (Word-Color-Button or PrevWord-PrevColor-Word-Color-Button)" +
+        "For example, \"rg-y\" presses YES when the current slide has word RED is shown in GREEN color.\n" +
+        "For example, \"bw-my-n\" presses NO when the previous slide has word BLUE shown in WHITE color, and current slide has word MANGENTA shown in YELLOW color.\n" +
+        "Replace any color with \"x\" to represent any color. For example, \"mx-y\" presses YES when the current slide has word MAGENTA with ANY color.\n" +
+        "Multiple options can be chained with spaces. For example: \"gr-y mb-n\" would press one of GREEN-RED-YES or MAGENTA-BLUE-NO.\n" +
+        "Which ever one the module generates first is the one pressed. Only one press will be registered. The press will be sent to chat.";
 #pragma warning restore 0414
 
     public struct TpPress
     {
         public int Word;
         public int Color;
+        public int? PrevWord;
+        public int? PrevColor;
         public int Button;
-        public TpPress(int w, int c, int b)
+        public TpPress(int w, int c, int? pw, int? pc, int b)
         {
             Word = w;
             Color = c;
+            PrevWord = pw;
+            PrevColor = pc;
             Button = b;
         }
     }
@@ -543,40 +549,73 @@ public class StroopsTestScript : MonoBehaviour
             buttons[1].OnHighlightEnded();
             yield break;
         }
-        var parameters = command.Split(';');
+        var parameters = command.Split(' ');
+        var match = Regex.Match(command, @"^\s*(?:(?<w1>[RYGBMWX])(?<c1>[RYGBMWX])(?:-(?<w2>[RYGBMWX])(?<c2>[RYGBMWX]))?-(?<b>[YN])\s*)+$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        if (!match.Success)
+            yield break;
         var list = new List<TpPress>();
+
         for (int i = 0; i < parameters.Length; i++)
         {
-            var m = Regex.Match(parameters[i], @"^\s*((?:press|hit|submit)\s+)?(?:(?<button>yes|y|no|n))\s+(?:(?<word>red|r|yellow|y|green|g|blue|b|magenta|m|white|w)\s+(?<color>red|r|yellow|y|green|g|blue|b|magenta|m|white|w))\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-            if (!m.Success)
-                yield break;
-            var word = "rygbmw".IndexOf(m.Groups["word"].Value[0]);
-            var color = "rygbmw".IndexOf(m.Groups["color"].Value[0]);
-            var button = "yn".IndexOf(m.Groups["button"].Value[0]);
-            list.Add(new TpPress(word, color, button));
+            if (parameters[i].Length == 4)
+            {
+                // No previous
+                var word = "rygbmwx".IndexOf(parameters[i][0]);
+                var color = "rygbmwx".IndexOf(parameters[i][1]);
+                var button = "yn".IndexOf(parameters[i][3]);
+                if (word == -1 || color == -1 || button == -1)
+                    yield break;
+                list.Add(new TpPress(word, color, null, null, button));
+            }
+            else if (parameters[i].Length == 7)
+            {
+                var prevWord = "rygbmwx".IndexOf(parameters[i][0]);
+                var prevColor = "rygbmwx".IndexOf(parameters[i][1]);
+                var word = "rygbmwx".IndexOf(parameters[i][3]);
+                var color = "rygbmwx".IndexOf(parameters[i][4]);
+                var button = "yn".IndexOf(parameters[i][6]);
+                if (word == -1 || color == -1 || button == -1 || prevWord == -1 || prevColor == -1)
+                    yield break;
+                list.Add(new TpPress(word, color, prevWord, prevColor, button));
+            }
         }
+
         yield return null;
         int btn;
         int w;
         int c;
+        int? pw;
+        int? pc;
         while (true)
         {
             for (int i = 0; i < list.Count; i++)
-                if (list[i].Word == wordList.Last() && list[i].Color == colorList.Last())
+                if (
+                    (list[i].Word == wordList.Last() || list[i].Word == 6) &&
+                    (list[i].Color == colorList.Last() || list[i].Color == 6) &&
+                    (list[i].PrevWord == null || list[i].PrevWord == 6 || (wordList.Count > 1 && list[i].PrevWord == wordList[wordList.Count - 2])) &&
+                    (list[i].PrevColor == null || list[i].PrevColor == 6 || (colorList.Count > 1 && list[i].PrevColor == colorList[colorList.Count - 2]))
+                    )
                 {
-                    w = list[i].Word;
-                    c = list[i].Color;
+                    w = wordList.Last();
+                    c = colorList.Last();
+                    if (wordList.Count < 2) pw = null;
+                    else pw = wordList[wordList.Count - 2];
+                    if (colorList.Count < 2) pc = null;
+                    else pc = colorList[colorList.Count - 2];
                     btn = list[i].Button;
                     goto foundPress;
                 }
             yield return "trycancel";
         }
         foundPress:
-        yield return string.Format("sendtochat {0} was pressed on word {1} with color {2} on Module {3} (Stroop's Test).",
+        var ws = new[] { "RED", "YELLOW", "GREEN", "BLUE", "MAGENTA", "WHITE" };
+        yield return string.Format("sendtochat Module {0} (Stroop’s Test) Pressed {1} on Word {2} Color {3}. {4}",
+            GetModuleCode(),
             new[] { "YES", "NO" }[btn],
-            new[] { "RED", "YELLOW", "GREEN", "BLUE", "MAGENTA", "WHITE" }[w],
-            new[] { "RED", "YELLOW", "GREEN", "BLUE", "MAGENTA", "WHITE" }[c],
-            GetModuleCode());
+            ws[w],
+            ws[c],
+            pw == null ? "" : "Previous slide: Word " + ws[pw.Value] + " Color " + ws[pc.Value] + "."
+            );
         buttons[btn].OnInteract();
     }
 
