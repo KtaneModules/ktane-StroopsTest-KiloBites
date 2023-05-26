@@ -354,7 +354,10 @@ public class StroopsTestScript : MonoBehaviour
                 Debug.LogFormat("[Stroop's Test #{0}] {1} Strike! {2}", moduleId, validLogging(questionCond, currentCond == 0 ? colorList.Last() : wordList.Last(), 0, validation), stage != 0 ? "Resetting to stage 1" : null);
             }
 
-            pressed[0] = false;
+            for (int i = 0; i < 2; i++)
+            {
+                pressed[i] = false;
+            }
 
             for (int i = 0; i < 6; i++)
             {
@@ -413,7 +416,10 @@ public class StroopsTestScript : MonoBehaviour
                 Debug.LogFormat("[Stroop's Test #{0}] {1} Strike! {2}", moduleId, validLogging(questionCond, currentCond == 0 ? colorList.Last() : wordList.Last(), 1, validation), stage != 0 ? "Resetting to stage 1." : null); ;
             }
 
-            pressed[1] = false;
+            for (int i = 0; i < 2; i++)
+            {
+                pressed[i] = false;
+            }
 
             for (int i = 0; i < 6; i++)
             {
