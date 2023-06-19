@@ -510,12 +510,12 @@ public class StroopsTestScript : MonoBehaviour
 
     // TP and autosolver implemented by Quinn Wuest
 #pragma warning disable 0414
-    private readonly string TwitchHelpMessage = "Command format: !{0} xx-x or !{0} xx-xx-x. (Word-Color-Button or PrevWord-PrevColor-Word-Color-Button)" +
-        "For example, \"rg-y\" presses YES when the current slide has word RED is shown in GREEN color.\n" +
-        "For example, \"bw-my-n\" presses NO when the previous slide has word BLUE shown in WHITE color, and current slide has word MANGENTA shown in YELLOW color.\n" +
-        "Replace any color with \"x\" to represent any color. For example, \"mx-y\" presses YES when the current slide has word MAGENTA with ANY color.\n" +
-        "Multiple options can be chained with spaces. For example: \"gr-y mb-n\" would press one of GREEN-RED-YES or MAGENTA-BLUE-NO.\n" +
-        "Which ever one the module generates first is the one pressed. Only one press will be registered. The press will be sent to chat.";
+    private readonly string TwitchHelpMessage = "Command format: !{0} xx-x or !{0} xx-xx-x. (Word-Color-Button or PrevWord-PrevColor-Word-Color-Button) [1/6]\n" +
+        "For example, \"rg-y\" presses YES when the current slide has word RED is shown in GREEN color. [2/6]\n" +
+        "For example, \"bw-my-n\" presses NO when the previous slide has word BLUE shown in WHITE color, and current slide has word MANGENTA shown in YELLOW color. [3/6]\n" +
+        "Replace any color with \"x\" to represent any color. For example, \"mx-y\" presses YES when the current slide has word MAGENTA with ANY color. [4/6]\n" +
+        "Multiple options can be chained with spaces. For example: \"gr-y mb-n\" would press one of GREEN-RED-YES or MAGENTA-BLUE-NO. [5/6]\n" +
+        "Which ever one the module generates first is the one pressed. Only one press will be registered. The press will be sent to chat. [6/6]";
 #pragma warning restore 0414
 
     public struct TpPress
